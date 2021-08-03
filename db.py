@@ -2,6 +2,8 @@ from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 from run import app
 from app import db
+import json
+from Models.item import TeaModel
 
 app.config.from_object('app.config')
 
@@ -13,3 +15,4 @@ manager.add_command('db', MigrateCommand)
 
 if __name__ == '__main__':
     manager.run()
+

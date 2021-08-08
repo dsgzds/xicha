@@ -7,12 +7,6 @@ from .. import common
 class Auth():
     @staticmethod
     def encode_auth_token(user_id, login_time):
-        """
-        生成认证Token
-        :param user_id: int
-        :param login_time: int(timestamp)
-        :return: string
-        """
         try:
             payload = {
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=10),
@@ -33,15 +27,10 @@ class Auth():
 
     @staticmethod
     def decode_auth_token(auth_token):
-        """
-        验证Token
-        :param auth_token:
-        :return: integer|string
-        """
         try:
             # payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'), leeway=datetime.timedelta(seconds=10))
             # 取消过期时间验证
-            payload = jwt.decode(auth_token, config.SECRET_KEY, options={'verify_exp': False})
+            payload = jwt.decode(auth_token, config.SECRET_KEY, options={'verify_exp': False}, algorithms='HS256')
             if ('data' in payload and 'id' in payload['data']):
                 return payload
             else:
@@ -53,11 +42,6 @@ class Auth():
 
 
     def authenticate(self, username, password):
-        """
-        用户登录，登录成功返回token，写将登录时间写入数据库；登录失败返回失败原因
-        :param password:
-        :return: json
-        """
         userInfo = Users.query.filter_by(username=username).first()
         if (userInfo is None):
             return jsonify(common.falseReturn('', '找不到用户'))
@@ -67,15 +51,11 @@ class Auth():
                 userInfo.login_time = login_time
                 Users.update(Users)
                 token = self.encode_auth_token(userInfo.id, login_time)
-                return jsonify(common.trueReturn(token.decode(), '登录成功'))
+                return jsonify(common.trueReturn(token, '登录成功'))
             else:
                 return jsonify(common.falseReturn('', '密码不正确'))
 
     def identify(self, request):
-        """
-        用户鉴权
-        :return: list
-        """
         auth_header = request.headers.get('Authorization')
         if (auth_header):
             auth_tokenArr = auth_header.split(" ")

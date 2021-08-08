@@ -12,3 +12,11 @@ def falseReturn(data, msg):
         "data": data,
         "msg": msg
     }
+
+def OrderReturn(data, order, msg):
+    return {
+        "status" : True,
+        "Teas" : data,
+        "order" : order,
+        "msg" : msg
+    }

@@ -4,7 +4,7 @@ from run import app
 from app import db
 # 导入Manager用来设置应用程序可通过指令操作
 from flask_script import Manager
-from flask_migrate import Migrate,MigrateCommand
+from flask_migrate import Migrate, MigrateCommand
 
 # 构建指令，设置当前app受指令控制（即将指令绑定给指定app对象）
 manage = Manager(app)

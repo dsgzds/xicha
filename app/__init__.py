@@ -19,7 +19,6 @@ def create_app(config_filename):
         return response
 
     from app import db
-    from Models.item import db
     db.init_app(app)
     with app.test_request_context():
         db.create_all()
